@@ -86,6 +86,45 @@ public class I_RemoveDuplicatedFromUnsortedLinkedList {
 		}
 	}
 
+	/*
+	 * Book solution - not using auxiliar buffer structure
+	 */
+	public static void removeDuplicatedByTheBookWithoutAux(Node head) {
+		if (head == null)
+			return;
+		Node previous = head;
+		Node current = previous.next;
+		while (current != null) {
+			// Look backwards for dups, and remove any that you see.
+			Node runner = head;
+			while (runner != current) {
+				if (runner.data == current.data) {
+					Node tmp = current.next;
+					previous.next = tmp;
+					current = tmp;
+					/*
+					 * We know we can’t have more than one dup preceding our
+					 * element since it would have been removed earlier.
+					 */
+					break;
+				}
+				runner = runner.next;
+			}
+
+			/*
+			 * If runner == current, then we didn’t find any duplicate elements
+			 * in the previous for loop. We then need to increment current. If
+			 * runner != current, then we must have hit the ‘break’ condition,
+			 * in which case we found a dup and current has already been
+			 * incremented.
+			 */
+			if (runner == current) {
+				previous = current;
+				current = current.next;
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		Node head = new Node(1);
 		head.appendToTail(2);
@@ -100,7 +139,7 @@ public class I_RemoveDuplicatedFromUnsortedLinkedList {
 		head.appendToTail(8);
 		head.appendToTail(6);
 		head.appendToTail(9);
-		removeDuplicatedNodesFromLinkedList(head);
+		removeDuplicatedByTheBookWithoutAux(head);
 		printResult(head);
 
 		head = new Node(1);
